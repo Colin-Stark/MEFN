@@ -74,7 +74,7 @@ class _SignUpState extends State<SignUp> {
   String? _validateEmail(String? value) {
     if (value == null ||
         !RegExp(r'^[a-zA-Z0-9._%+-]+@myseneca\.ca$').hasMatch(value)) {
-      return 'email should end with @myseneca.ca';
+      return 'Please enter a valid Seneca Email';
     }
     return null;
   }
@@ -294,10 +294,38 @@ class _SignUpState extends State<SignUp> {
                                     },
                                   );
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Error!'),
-                                    ),
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: SizedBox(
+                                          height: cs.height / 6,
+                                          width: cs.width / 2,
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.warning,
+                                                  color: Colors.amber,
+                                                  size: cs.height / 20,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: cs.height / 50,
+                                                  ),
+                                                  child: const Text(
+                                                    'Error! Try again, if the problem persist, send an email to collinscodes@gmail.com',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
                                 }
                               });
