@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:ratemyprofessor/signup.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
+import 'package:ratemyprofessor/page/mobileversion/signup.dart';
+import 'package:ratemyprofessor/page/webversion/signup.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,44 +12,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignUp(),
+      home: _getAppropriateWidget(),
     );
   }
-}
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    var url = Uri.parse('https://seneca-rate-my-professor.vercel.app/');
-    try {
-      var response = await http.get(url);
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body: ${response.body}');
-    } catch (e) {
-      debugPrint('Error: $e');
+  Widget _getAppropriateWidget() {
+    if (kIsWeb) {
+      return const WebSignup();
+    } else if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android) {
+      return const MobileSignup();
+    } else {
+      return const Center(
+        child: Text("Platform not supported"),
+      );
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Hello World!'),
-      ),
-    );
   }
 }
