@@ -18,82 +18,103 @@ class _WebSignupState extends SignUpBaseState<WebSignup> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
-            height: cs.height,
-            width: cs.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: cs.width / 2,
-                      height: cs.height / 20,
-                      child: const RiveAnimation.asset('assets/goldstar.riv'),
-                    )
-                  ],
-                ),
-                Text(
-                  "Rate My Professor",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: cs.height / 35,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: cs.height / 20),
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: cs.height / 40,
+              height: cs.height,
+              width: cs.width,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: cs.height,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                      ),
+                      child: Image.asset(
+                        'assets/campus.jpeg',
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: cs.width / 8),
-                  child: Form(
-                    key: formKey,
+                  Expanded(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomTextFormField(
-                          labelText: 'Email',
-                          picon: Icons.email,
-                          formcontroller: emailController,
-                          validator: validateEmail,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: cs.width / 2,
+                              height: cs.height / 20,
+                              child: const RiveAnimation.asset(
+                                  'assets/goldstar.riv'),
+                            )
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: CustomTextFormField(
-                            labelText: 'Password',
-                            isPassword: true,
-                            formcontroller: passwordController,
-                            validator: validatePassword,
-                            picon: Icons.lock,
+                        Text(
+                          "Rate My Professor",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: cs.height / 35,
                           ),
                         ),
-                        SizedBox(
-                          width: cs.width,
-                          height: cs.height / 15,
-                          child: ElevatedButton(
-                            onPressed: handleSignUp,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow[800],
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: cs.height / 20),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: cs.height / 40,
                             ),
-                            child: const Text('Sign Up'),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: cs.width / 8),
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                CustomTextFormField(
+                                  labelText: 'Email',
+                                  picon: Icons.email,
+                                  formcontroller: emailController,
+                                  validator: validateEmail,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: CustomTextFormField(
+                                    labelText: 'Password',
+                                    isPassword: true,
+                                    formcontroller: passwordController,
+                                    validator: validatePassword,
+                                    picon: Icons.lock,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: cs.width,
+                                  height: cs.height / 15,
+                                  child: ElevatedButton(
+                                    onPressed: handleSignUp,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.yellow[800],
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    child: const Text('Sign Up'),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                  )
+                ],
+              )),
         ),
       ),
     );

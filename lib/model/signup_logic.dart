@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ratemyprofessor/page/otp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SignUpBase extends StatefulWidget {
   const SignUpBase({super.key});
 }
 
 abstract class SignUpBaseState<T extends SignUpBase> extends State<T> {
+  // SHARED PREFERENCES
+  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
+  // FORM DETAILS
   final formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -26,6 +31,33 @@ abstract class SignUpBaseState<T extends SignUpBase> extends State<T> {
     return null;
   }
 
+  // Future<String> postData() async {
+  //   var url = Uri.parse('https://rmp-roan.vercel.app/register');
+  //   try {
+  //     var response = await http.post(
+  //       url,
+  //       body: {
+  //         'email': emailController.text,
+  //         'password': passwordController.text,
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200 &&
+  //         response.body == 'Registration Successful') {
+  //       return 'User Created!';
+  //     } else if (response.body == "Email already exists" &&
+  //         response.statusCode == 400) {
+  //       return 'Repeated Email!';
+  //     }
+  //     await asyncPrefs.setString('username', emailController.text);
+  //     await asyncPrefs.setString('password', passwordController.text);
+  //     return 'Error';
+  //   } catch (e) {
+  //     debugPrint('Error: $e');
+  //     return 'Error';
+  //   }
+  // }
+
   Future<String> postData() async {
     var url = Uri.parse('https://rmp-roan.vercel.app/register');
     try {
@@ -39,11 +71,16 @@ abstract class SignUpBaseState<T extends SignUpBase> extends State<T> {
 
       if (response.statusCode == 200 &&
           response.body == 'Registration Successful') {
+        // Store username and password only if the registration is successful
+        await asyncPrefs.setString('username', emailController.text);
+        await asyncPrefs.setString('password', passwordController.text);
+
         return 'User Created!';
       } else if (response.body == "Email already exists" &&
           response.statusCode == 400) {
         return 'Repeated Email!';
       }
+
       return 'Error';
     } catch (e) {
       debugPrint('Error: $e');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OTPCHECKER extends StatefulWidget {
   const OTPCHECKER({super.key});
@@ -9,6 +10,8 @@ class OTPCHECKER extends StatefulWidget {
 }
 
 class _OTPCHECKERState extends State<OTPCHECKER> {
+  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
@@ -61,6 +64,18 @@ class _OTPCHECKERState extends State<OTPCHECKER> {
     );
   }
 
+  Future<void> _verifyOTP() async {
+    final String? username = await asyncPrefs.getString('username');
+    final String? password = await asyncPrefs.getString('password');
+
+    final String otp = _controllers.fold<String>(
+      '',
+      (previousValue, element) => previousValue + element.text,
+    );
+
+    debugPrint('username: $username, password: $password, otp: $otp');
+  }
+
   @override
   Widget build(BuildContext context) {
     Size cs = MediaQuery.of(context).size;
@@ -77,11 +92,36 @@ class _OTPCHECKERState extends State<OTPCHECKER> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: cs.width * 0.07),
               child: Form(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(6, (index) {
-                    return otpField(index: index, main: index == 0);
-                  }),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                        6,
+                        (index) {
+                          return otpField(index: index, main: index == 0);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: cs.height / 20,
+                      ),
+                      child: SizedBox(
+                        width: cs.width,
+                        height: cs.height / 15,
+                        child: ElevatedButton(
+                          onPressed: _verifyOTP,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Verify OTP'),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
